@@ -15,7 +15,6 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
 
-
 /**
  * Created by erwinj on 7/3/14.
  */
@@ -143,18 +142,6 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
         int width = size.width;
         int height = size.height;
 
-        if (DisplayUtils.getScreenOrientation(getContext()) == Configuration.ORIENTATION_PORTRAIT) {
-            byte[] rotatedData = new byte[data.length];
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++)
-                    rotatedData[x * height + height - y - 1] = data[x + y * width];
-            }
-            int tmp = width;
-            width = height;
-            height = tmp;
-            data = rotatedData;
-        }
-
         Image barcode = new Image(width, height, "Y800");
         barcode.setData(data);
 
@@ -182,6 +169,7 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
     public interface ResultHandler {
         public void handleQrResult(String qrCode);
     }
+
     static {
         System.loadLibrary("iconv");
     }

@@ -80,6 +80,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void showCameraPreview() {
+        Log.d(TAG, "showCameraPreview");
         if (mCamera != null) {
             try {
                 mPreviewing = true;
@@ -99,6 +100,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 
     public void stopCameraPreview() {
+        Log.d(TAG, "stopCameraPreview");
         if (mCamera != null) {
             try {
                 mPreviewing = false;

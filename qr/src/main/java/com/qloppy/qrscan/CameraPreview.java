@@ -129,15 +129,21 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Camera.Size optimalSize = getOptimalPreviewSize();
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
-        int[] range = parameters.getSupportedPreviewFpsRange().get(0);
+        List<int[]> ranges = parameters.getSupportedPreviewFpsRange();
+
+        // Let's boost the camera to go as fast as we can.
+        int[] range = ranges.get(ranges.size() - 1);
         parameters.setPreviewFpsRange(range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX], range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
         mCamera.setParameters(parameters);
 
         // Now calculate the needed buffer size
         int bufferSize = parameters.getPreviewSize().height * parameters.getPreviewSize().width *
                 ImageFormat.getBitsPerPixel(parameters.getPreviewFormat());
-        mCamera.addCallbackBuffer(new byte[bufferSize]);
 
+        // Lets do 3 buffers, from playing around with it, this s
+        mCamera.addCallbackBuffer(new byte[bufferSize]);
+        mCamera.addCallbackBuffer(new byte[bufferSize]);
+        mCamera.addCallbackBuffer(new byte[bufferSize]);
     }
 
     public int getDisplayOrientation() {

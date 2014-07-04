@@ -143,7 +143,7 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
     }
 
     public double getFps() {
-        return ((double) mTicksum / MAXSAMPLES / 1000);
+        return 1 / ((double) mTicksum / MAXSAMPLES / 1000);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
             calcAverageTick(System.currentTimeMillis() - mLastScan);
         }
         mLastScan = System.currentTimeMillis();
-        Log.d(TAG, "Got a frame");
+        Log.d(TAG, "Got a frame, fps: " + getFps());
         Camera.Parameters parameters = camera.getParameters();
         Camera.Size size = parameters.getPreviewSize();
         int width = size.width;

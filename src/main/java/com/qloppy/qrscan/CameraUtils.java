@@ -6,32 +6,29 @@ import android.hardware.Camera;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import java.util.concurrent.Semaphore;
+
 public class CameraUtils {
+
+    private static CameraHandlerThread mThread = null;
+    private static Camera c = null;
 
     private static Camera openCamera() {
         try {
             c = Camera.open(); // attempt to get a Camera instance
         } catch (Exception e) {
             // Camera is not available (in use or does not exist)
+            c = null;
         }
         return c; // returns null if camera is unavailable
     }
-
-    /**
-     * A safe way to get an instance of the Camera object.
-     */
-
-    private static CameraHandlerThread mThread = null;
-    private static Camera c = null;
 
     public static Camera getCameraInstance() {
         if (mThread == null) {
             mThread = new CameraHandlerThread();
         }
 
-        synchronized (mThread) {
-            mThread.openCamera();
-        }
+        mThread.openCamera();
 
         return c;
     }
@@ -47,6 +44,7 @@ public class CameraUtils {
 
     private static class CameraHandlerThread extends HandlerThread {
         Handler mHandler = null;
+        Semaphore semaphore = new Semaphore(0);
 
         CameraHandlerThread() {
             super("CameraHandlerThread");
@@ -55,22 +53,17 @@ public class CameraUtils {
             mHandler = new Handler(getLooper());
         }
 
-        synchronized void notifyCameraOpened() {
-            notify();
-        }
-
         void openCamera() {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     openCamera();
-                    notifyCameraOpened();
+                    semaphore.release();
                 }
             });
             try {
-                wait();
+                semaphore.acquire();
             } catch (InterruptedException e) {
-                // Log.w(LOG_TAG, "wait was interrupted");
             }
         }
     }

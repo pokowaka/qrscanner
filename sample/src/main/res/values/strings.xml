@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QRScanner Sample</string>
+    <string name="scanner_activity">ZBar Scanner - Full Activity</string>
+    <string name="simple_scanner_activity">QRScanner - Simple Activity</string>
+    <string name="simple_scanner_fragment_activity">QRScanner  - Simple Fragment Activity</string>
+    <string name="simple_activity_sample">Simple Activity Sample</string>
+    <string name="simple_fragment_sample">Simple Fragment Sample</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+</resources>

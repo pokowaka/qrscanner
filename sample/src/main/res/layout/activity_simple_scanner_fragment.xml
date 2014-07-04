@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textScanPrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scanner_fragment"
+        android:layout_centerHorizontal="true"
+        android:text="Point the camera towards the QR Code you wish to scan."
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <com.qloppy.qrscan.QRCodeScannerView
+        android:id="@+id/qrScan"
+        android:layout_width="match_parent"
+        android:layout_height="400dip">
+    </com.qloppy.qrscan.QRCodeScannerView>
+
+    <TextView
+        android:id="@+id/textScanSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scanner_fragment"
+        android:layout_centerHorizontal="true"
+        android:text="FPS:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <TextView
+        android:id="@+id/textScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scanner_fragment"
+        android:layout_centerHorizontal="true"
+        android:text="Scanned:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>

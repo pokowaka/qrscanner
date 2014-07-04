@@ -1,0 +1,13 @@
+apply plugin: 'android'
+
+dependencies {
+    compile project(":qr")
+    compile supportLibraryDependency
+    compile 'com.android.support:appcompat-v7:19.1.0'
+}
+
+android {
+    defaultConfig {
+        packageName "${project.group}.qrscan.sample"
+    }
+}

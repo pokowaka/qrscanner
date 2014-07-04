@@ -1,0 +1,23 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="ScanTheme" parent="Theme.Base.AppCompat.Light.DarkActionBar">
+        <item name="android:windowActionBarOverlay">false</item>
+
+        <!-- Support library compatibility -->
+        <item name="windowActionBarOverlay">false</item>
+    </style>
+
+    <style name="ActionBarStyle.Transparent" parent="@android:Widget.ActionBar">
+        <item name="android:background">#99000000</item>
+        <item name="android:titleTextStyle">@style/ActionBarStyle.Transparent.TitleTextStyle</item>
+        <item name="android:backgroundSplit">#99000000</item>
+    </style>
+
+    <style name="ActionBarStyle.Transparent.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>

@@ -3,6 +3,8 @@ package com.qloppy.qrscan;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,11 +22,17 @@ import net.sourceforge.zbar.SymbolSet;
  */
 public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCallback {
     private static final String TAG = QRCodeScannerView.class.getName();
+    private static final int MAXSAMPLES = 10;
+    private long mTicklist[] = new long[MAXSAMPLES];
     private Camera mCamera;
     private CameraPreview mPreview;
     private ViewFinderView mFinder;
     private ImageScanner mScanner;
     private ResultHandler mResultHandler;
+    private int mTickindex = 0;
+    private long mTicksum = 0;
+    private long mLastScan = 0;
+
 
     public QRCodeScannerView(Context context) {
         super(context);
@@ -134,8 +142,16 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
         }
     }
 
+    public double getFps() {
+        return ((double) mTicksum / MAXSAMPLES / 1000);
+    }
+
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+        if (mLastScan > 0) {
+            calcAverageTick(System.currentTimeMillis() - mLastScan);
+        }
+        mLastScan = System.currentTimeMillis();
         Log.d(TAG, "Got a frame");
         Camera.Parameters parameters = camera.getParameters();
         Camera.Size size = parameters.getPreviewSize();
@@ -159,11 +175,29 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
                         break;
                     }
                 }
-                mResultHandler.handleQrResult(qrCode);
+
+                // Now post the result back on the UI thread.
+                final String qr = qrCode;
+                new Handler(Looper.getMainLooper()).post( new Runnable() {
+                    @Override
+                    public void run() {
+                        mResultHandler.handleQrResult(qr);
+                    }
+                });
             }
         } else {
             camera.addCallbackBuffer(data);
         }
+    }
+
+    private double calcAverageTick(long newtick) {
+        mTicksum -= mTicklist[mTickindex];  /* subtract value falling off */
+        mTicksum += newtick;              /* add new value */
+        mTicklist[mTickindex] = newtick;   /* save new value so it can be subtracted later */
+        if (++mTickindex == MAXSAMPLES)    /* inc buffer index */
+            mTickindex = 0;
+
+        return ((double) mTicksum / MAXSAMPLES);
     }
 
     public interface ResultHandler {

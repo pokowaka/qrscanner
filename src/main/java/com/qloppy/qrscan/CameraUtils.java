@@ -13,7 +13,7 @@ public class CameraUtils {
     private static CameraHandlerThread mThread = null;
     private static Camera c = null;
 
-    private static Camera openCamera() {
+    private static Camera retrieveCamera() {
         try {
             c = Camera.open(); // attempt to get a Camera instance
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class CameraUtils {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    openCamera();
+                    retrieveCamera();
                     semaphore.release();
                 }
             });

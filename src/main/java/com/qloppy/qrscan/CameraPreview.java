@@ -55,6 +55,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         mSurfaceCreated = true;
+        if (mAutoFocus) {
+            mCamera.autoFocus(autoFocusCB);
+        }
     }
 
     @Override
@@ -81,7 +84,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 mCamera.setDisplayOrientation(getDisplayOrientation());
                 mCamera.setPreviewCallbackWithBuffer(mPreviewCallback);
                 mCamera.startPreview();
-                if (mAutoFocus) {
+                if (mAutoFocus && mSurfaceCreated) {
                     mCamera.autoFocus(autoFocusCB);
                 }
             } catch (Exception e) {

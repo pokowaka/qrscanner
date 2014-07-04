@@ -175,7 +175,7 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
                 mResultHandler.handleQrResult(qrCode);
             }
         } else {
-            camera.setOneShotPreviewCallback(this);
+            camera.addCallbackBuffer(data);
         }
     }
 

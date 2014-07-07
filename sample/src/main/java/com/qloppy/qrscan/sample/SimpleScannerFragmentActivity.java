@@ -1,10 +1,12 @@
 package com.qloppy.qrscan.sample;
 
+import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +57,14 @@ public class SimpleScannerFragmentActivity extends ActionBarActivity implements 
             r.play();
         } catch (Exception e) {
         }
+
+        // Vibrate for 500 milliseconds
+        try {
+            Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(500);
+        } catch (Exception e) {
+        }
+
 
         mTextScan.setText("Scanned: " + rawResult);
         mScannerView.startCamera();

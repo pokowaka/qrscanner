@@ -1,6 +1,11 @@
 package com.qloppy.qrscan.sample;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
@@ -32,6 +37,23 @@ public class SimpleScannerActivity extends ActionBarActivity implements QRCodeSc
 
     @Override
     public void handleQrResult(String rawResult) {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+
+        } catch (Exception e) {
+        }
+
+
+        // Vibrate for 500 milliseconds
+        try {
+            Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(500);
+        } catch (Exception e) {
+
+        }
+
         Toast.makeText(this, "Contents = " + rawResult, Toast.LENGTH_SHORT).show();
         mScannerView.startCamera();
     }

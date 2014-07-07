@@ -76,21 +76,36 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
         addView(mFinder);
     }
 
-    public void startCamera() {
+    public synchronized void startCamera() {
+        Log.d(TAG, "startCamera: " + (mCamera != null));
+
+        // Well, we must already have started the camera.
+        if (mCamera != null)
+            return;
+
         mCamera = CameraUtils.getCameraInstance();
         if (mCamera != null) {
-            mPreview.setCamera(mCamera, this);
-            mPreview.initCameraPreview();
-            mPreview.showCameraPreview();
+            try {
+                mPreview.setCamera(mCamera, this);
+                mPreview.initCameraPreview();
+                mPreview.showCameraPreview();
+            } catch (Exception e) {
+                Log.e(TAG, "startCamera: Failure: " + e, e);
+            }
         }
     }
 
-    public void stopCamera() {
+    public synchronized void stopCamera() {
+        Log.d(TAG, "stopCamera: " + (mCamera != null));
         if (mCamera != null) {
-            mPreview.stopCameraPreview();
-            mPreview.setCamera(null, null);
-            mCamera.release();
-            mCamera = null;
+            try {
+                mPreview.stopCameraPreview();
+                mPreview.setCamera(null, null);
+                mCamera.release();
+                mCamera = null;
+            } catch (Exception e) {
+                Log.e(TAG, "stopCamera: Failure: " + e, e);
+            }
         }
     }
 
@@ -178,7 +193,7 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
 
                 // Now post the result back on the UI thread.
                 final String qr = qrCode;
-                new Handler(Looper.getMainLooper()).post( new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         mResultHandler.handleQrResult(qr);

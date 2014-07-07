@@ -9,7 +9,7 @@ import android.util.Log;
 
 import java.util.concurrent.Semaphore;
 
-public class CameraUtils {
+class CameraUtils {
 
     private static CameraHandlerThread mThread = null;
     private static Camera c = null;

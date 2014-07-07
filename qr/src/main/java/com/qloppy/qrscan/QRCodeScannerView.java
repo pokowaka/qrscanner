@@ -178,8 +178,10 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
 
         int result = mScanner.scanImage(barcode);
 
+        // Recycle the buffer..
+        camera.addCallbackBuffer(data);
+
         if (result != 0) {
-            stopCamera();
             if (mResultHandler != null) {
                 SymbolSet syms = mScanner.getResults();
                 String qrCode = "";
@@ -191,6 +193,8 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
                     }
                 }
 
+                stopCamera();
+                Log.i(TAG, "onPreviewFrame: Found QR: " + qrCode);
                 // Now post the result back on the UI thread.
                 final String qr = qrCode;
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -200,8 +204,6 @@ public class QRCodeScannerView extends FrameLayout implements Camera.PreviewCall
                     }
                 });
             }
-        } else {
-            camera.addCallbackBuffer(data);
         }
     }
 

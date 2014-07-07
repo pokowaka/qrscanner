@@ -25,7 +25,13 @@ public class SimpleScannerActivity extends ActionBarActivity implements QRCodeSc
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this);
+        mScannerView.setResultHandler(new QRCodeScannerView.ResultHandler() {
+
+            @Override
+            public void handleQrResult(String qrCode) {
+
+            }
+        });
         mScannerView.startCamera();
     }
 

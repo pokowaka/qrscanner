@@ -1,34 +1,25 @@
 package com.qloppy.qrscan;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
 import me.dm7.barcodescanner.zbar.R;
 
-public class ViewFinderView extends View {
+class ViewFinderView extends View {
     private static final String TAG = "ViewFinderView";
 
     private Rect mFramingRect;
 
-    private static final int MIN_FRAME_WIDTH = 240;
-    private static final int MIN_FRAME_HEIGHT = 240;
+    private static final float LANDSCAPE_WIDTH_RATIO = 5f / 8;
+    private static final float LANDSCAPE_HEIGHT_RATIO = 5f / 8;
 
-    private static final float LANDSCAPE_WIDTH_RATIO = 5f/8;
-    private static final float LANDSCAPE_HEIGHT_RATIO = 5f/8;
-    private static final int LANDSCAPE_MAX_FRAME_WIDTH = (int) (1920 * LANDSCAPE_WIDTH_RATIO); // = 5/8 * 1920
-    private static final int LANDSCAPE_MAX_FRAME_HEIGHT = (int) (1080 * LANDSCAPE_HEIGHT_RATIO); // = 5/8 * 1080
-
-    private static final float PORTRAIT_WIDTH_RATIO = 7f/8;
-    private static final float PORTRAIT_HEIGHT_RATIO = 3f/8;
-    private static final int PORTRAIT_MAX_FRAME_WIDTH = (int) (1080 * PORTRAIT_WIDTH_RATIO); // = 7/8 * 1080
-    private static final int PORTRAIT_MAX_FRAME_HEIGHT = (int) (1920 * PORTRAIT_HEIGHT_RATIO); // = 3/8 * 1920
+    private static final float PORTRAIT_WIDTH_RATIO = 7f / 8;
+    private static final float PORTRAIT_HEIGHT_RATIO = 3f / 8;
 
     private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
     private int scannerAlpha;
@@ -43,13 +34,9 @@ public class ViewFinderView extends View {
         super(context, attrs);
     }
 
-    public Rect getFramingRect() {
-        return mFramingRect;
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
-        if(mFramingRect == null) {
+        if (mFramingRect == null) {
             return;
         }
 
